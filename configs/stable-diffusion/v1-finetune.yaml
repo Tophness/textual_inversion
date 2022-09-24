@@ -24,7 +24,7 @@ model:
       target: ldm.modules.embedding_manager.EmbeddingManager
       params:
         placeholder_strings: ["*"]
-        initializer_words: ["sculpture"]
+        initializer_words: ["face","man","photo"]
         per_image_tokens: false
         num_vectors_per_token: 1
         progressive_words: False
@@ -75,7 +75,7 @@ model:
 data:
   target: main.DataModuleFromConfig
   params:
-    batch_size: 2
+    batch_size: 1
     num_workers: 2
     wrap: false
     train:
@@ -102,9 +102,9 @@ lightning:
       target: main.ImageLogger
       params:
         batch_frequency: 500
-        max_images: 8
+        max_images: 20
         increase_log_steps: False
 
   trainer:
     benchmark: True
-    max_steps: 6100
+    max_steps: 61000
