@@ -1,5 +1,5 @@
 model:
-  base_learning_rate: 5e-04
+  base_learning_rate: 5.0e-04
   target: ldm.models.diffusion.ddpm.LatentDiffusion
   params:
     linear_start: 0.00085
@@ -24,9 +24,9 @@ model:
       target: ldm.modules.embedding_manager.EmbeddingManager
       params:
         placeholder_strings: ["*"]
-        initializer_words: ["face","man","photo"]
+        initializer_words: ["dragon"]
         per_image_tokens: false
-        num_vectors_per_token: 1
+        num_vectors_per_token: 8
         progressive_words: False
 
     unet_config:
@@ -73,12 +73,25 @@ model:
       target: ldm.modules.encoders.modules.FrozenCLIPEmbedder
 
 data:
-  target: ldm.data.lgs.LGSModule
+  target: main.DataModuleFromConfig
   params:
     batch_size: 4
     num_workers: 8
-    size: 512
-    repeats: 100
+    wrap: false
+    train:
+      target: ldm.data.personalized_style.PersonalizedBase
+      params:
+        size: 512
+        set: train
+        per_image_tokens: false
+        repeats: 100
+    validation:
+      target: ldm.data.personalized_style.PersonalizedBase
+      params:
+        size: 512
+        set: val
+        per_image_tokens: false
+        repeats: 10
 
 lightning:
   modelcheckpoint:
@@ -89,10 +102,10 @@ lightning:
       target: main.ImageLogger
       params:
         batch_frequency: 500
-        max_images: 20
+        max_images: 8
         increase_log_steps: False
 
   trainer:
     benchmark: True
     max_steps: 100000
-    accumulate_grad_batches: 1
+    accumulate_grad_batches: 2
