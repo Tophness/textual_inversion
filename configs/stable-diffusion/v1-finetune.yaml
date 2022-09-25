@@ -75,7 +75,7 @@ model:
 data:
   target: ldm.data.lgs.LGSModule
   params:
-    batch_size: 4
+    batch_size: 2
     num_workers: 8
     size: 512
     repeats: 100
